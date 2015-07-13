@@ -1,9 +1,7 @@
 require 'responders'
 
 module Responders
-  
   module PaginationResponder
-  
     def respond
       if paginated?
         controller.headers.merge! "Pagination-Limit" => resource.limit_value.to_s, 
