@@ -44,6 +44,7 @@ ActiveRecord::Base.connection.execute <<SQL
 SQL
 
 class ApplicationResponder < ActionController::Responder
+  include Responders::HttpCacheResponder
   include Responders::PaginationResponder
 end
 
@@ -89,6 +90,6 @@ class ArtistsController < ApplicationController
     end
 
     def artist_params
-      params.permit(:name, :featured)
+      params.permit(:name)
     end
 end

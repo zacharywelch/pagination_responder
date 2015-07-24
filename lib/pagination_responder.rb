@@ -25,11 +25,15 @@ module Responders
     end
 
     def next_page
+      puts "next_page started"
       url_for params.merge(page: resource.next_page) unless resource.last_page?
+      puts "next_page ended"
     end
 
     def prev_page
+      puts "prev_page started"
       url_for params.merge(page: resource.prev_page) unless resource.first_page?
+      puts "prev_page ended"
     end
   end
 end
