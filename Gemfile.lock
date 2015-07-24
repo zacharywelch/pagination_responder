@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     pagination_responder (0.0.1)
-      rails (~> 4.2.3)
+      rails (~> 4.0)
       responders
 
 GEM

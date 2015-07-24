@@ -7,6 +7,10 @@ class PaginationResponderTest < ActionController::TestCase
     100.times { Artist.create(name: "foo") }
   end
 
+  teardown do
+    Artist.delete_all
+  end
+  
   def json
     JSON.parse(response.body)
   end
@@ -26,5 +30,21 @@ class PaginationResponderTest < ActionController::TestCase
     assert_includes response.headers, "Pagination-Limit"
     assert_includes response.headers, "Pagination-Offset"
     assert_includes response.headers, "Pagination-Count"
+    assert_includes response.headers, "Pagination-Next"
+    assert_includes response.headers, "Pagination-Prev"
+  end
+
+  test "first page" do
+    get :index, format: :json, page: 1
+
+    assert_response :success
+    assert_equal response.headers["Pagination-Prev"], nil
+  end
+
+  test "last page" do
+    get :index, format: :json, page: 4
+
+    assert_response :success
+    assert_equal response.headers["Pagination-Next"], nil
   end
 end
