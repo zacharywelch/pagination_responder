@@ -38,13 +38,13 @@ class PaginationResponderTest < ActionController::TestCase
     get :index, format: :json, page: 1
 
     assert_response :success
-    assert_equal response.headers["Pagination-Prev"], nil
+    assert_empty response.headers["Pagination-Prev"]
   end
 
   test "last page" do
     get :index, format: :json, page: 4
 
     assert_response :success
-    assert_equal response.headers["Pagination-Next"], nil
+    assert_empty response.headers["Pagination-Next"]
   end
 end

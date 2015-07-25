@@ -3,20 +3,24 @@ require 'responders'
 module Responders
   module PaginationResponder
     def respond
-      if paginated?
-        controller.headers.merge! "Pagination-Limit" => resource.limit_value.to_s, 
-                                  "Pagination-Offset" => resource.offset_value.to_s,
-                                  "Pagination-Count" => resource.total_count.to_s,
-                                  "Pagination-Next" => next_page,
-                                  "Pagination-Prev" => prev_page
-      end
+      controller.headers.merge! pagination_headers if paginated?
       super
     end
 
-    # delegate :url_for, to: :controller
-    # delegate :params, to: :request
+    delegate :url_for, to: :controller
+    delegate :params, to: :request
 
     private
+
+    def pagination_headers
+      { 
+        "Pagination-Limit"  => resource.limit_value.to_s, 
+        "Pagination-Offset" => resource.offset_value.to_s,
+        "Pagination-Count"  => resource.total_count.to_s,
+        "Pagination-Next"   => next_page.to_s,
+        "Pagination-Prev"   => prev_page.to_s 
+      }
+    end    
 
     def paginated?
       resource.respond_to?(:limit_value) &&
@@ -25,15 +29,11 @@ module Responders
     end
 
     def next_page
-      puts "next_page started"
-      controller.url_for request.params.merge(page: resource.next_page) unless resource.last_page?
-      puts "next_page ended"
+      url_for params.merge(page: resource.next_page) unless resource.last_page?
     end
 
     def prev_page
-      puts "prev_page started"
-      controller.url_for request.params.merge(page: resource.prev_page) unless resource.first_page?
-      puts "prev_page ended"
+      url_for params.merge(page: resource.prev_page) unless resource.first_page?
     end
   end
 end
