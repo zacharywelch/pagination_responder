@@ -1,4 +1,4 @@
-# pagination_responder
+# PaginationResponder
 
 A Rails responder for pagination
 
